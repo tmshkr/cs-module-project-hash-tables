@@ -8,6 +8,10 @@ class HashTableEntry:
         self.value = value
         self.next = None
 
+    def __repr__(self):
+        next_key = None if self.next is None else self.next.key
+        return f"HashTableEntry({self.key}, {self.value}, next: {next_key})"
+
 
 # Hash table can't have fewer than this many slots
 MIN_CAPACITY = 8
@@ -90,7 +94,18 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        self.storage[index] = value
+        if self.storage[index] == None or self.storage[index].key == key:
+            self.storage[index] = HashTableEntry(key, value)
+            return self.storage[index]
+
+        curr = self.storage[index]
+        while curr.next != None:
+            if curr.next.key == key:
+                break
+            curr = curr.next
+
+        curr.next = HashTableEntry(key, value)
+        return curr.next
 
     def delete(self, key):
         """
@@ -101,10 +116,19 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        if self.storage[index] == None:
-            print("That key isn't in the hash table")
-        else:
-            self.storage[index] = None
+        if self.storage[index].key == key:
+            self.storage[index] = self.storage[index].next
+            return None
+
+        curr = self.storage[index]
+        while curr != None:
+            if curr.next.key == key:
+                curr.next = curr.next.next
+                return None
+            curr = curr.next
+
+        print("That key isn't in the hash table")
+        return None
 
     def get(self, key):
         """
@@ -115,7 +139,12 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        return self.storage[index]
+        curr = self.storage[index]
+        while curr != None:
+            if curr.key == key:
+                return curr.value
+            curr = curr.next
+        return curr
 
     def resize(self, new_capacity):
         """
