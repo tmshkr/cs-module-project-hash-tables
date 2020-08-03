@@ -122,7 +122,7 @@ class HashTable:
 
         curr = self.storage[index]
         while curr != None:
-            if curr.next.key == key:
+            if curr.next and curr.next.key == key:
                 curr.next = curr.next.next
                 return None
             curr = curr.next
