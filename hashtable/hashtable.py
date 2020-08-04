@@ -56,7 +56,7 @@ class HashTable:
         """
         return self.keys / self.capacity
 
-    def fnv1(self, key, seed=0):
+    def fnv1(self, key):
         """
         FNV-1 Hash, 64-bit
 
@@ -145,6 +145,7 @@ class HashTable:
                     curr = curr.next
                 else:
                     print("That key isn't in the hash table")
+                    break
 
         if self.get_load_factor() < 0.2:
             new_capacity = max(self.capacity // 2, 8)
