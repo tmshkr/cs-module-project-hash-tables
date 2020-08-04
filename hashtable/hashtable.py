@@ -92,7 +92,7 @@ class HashTable:
         # return self.fnv1(key) % self.capacity
         return self.djb2(key) % self.capacity
 
-    def put(self, key, value):
+    def put(self, key, value, resizing=False):
         """
         Store the value with the given key.
 
@@ -105,7 +105,8 @@ class HashTable:
 
         if self.storage[index] == None:
             self.storage[index] = entry
-            self.keys += 1
+            if not resizing:
+                self.keys += 1
         elif self.storage[index].key == key:
             self.storage[index] = entry
         else:
@@ -115,7 +116,8 @@ class HashTable:
                     break
                 curr = curr.next
             curr.next = entry
-            self.keys += 1
+            if not resizing:
+                self.keys += 1
         
         if self.get_load_factor() > 0.7:
             self.resize(self.capacity * 2)
@@ -182,7 +184,7 @@ class HashTable:
 
         for curr in old_storage:
             while curr:
-                self.put(curr.key, curr.value)
+                self.put(curr.key, curr.value, True)
                 curr = curr.next
             
 
