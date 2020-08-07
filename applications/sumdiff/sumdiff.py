@@ -26,9 +26,7 @@ for c in q:
     for d in q:
         target = f(c) - f(d)
         if target in ht:
-            for t in ht[target]:
-                a = t[0]
-                b = t[1]
+            for (a,b) in ht[target]:
                 matched.append((a,b,c,d))
 
 
